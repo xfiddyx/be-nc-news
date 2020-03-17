@@ -1,5 +1,7 @@
-const client = require('../connection');
+const connection = require('../connection');
 
-const getTopics = () => {};
+const getTopics = () => {
+  return connection.select('*').from('topics');
+};
 
 module.exports = { getTopics };

@@ -7,7 +7,7 @@
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "knex seed:run",
     "test-utils": "mocha spec/utils.spec.js",
-    "test": "npm run setup-dbs && NODE ENV=test mocha spec/app.spec.js",
+    "test": "npm run setup-dbs && NODE_ENV=test mocha spec/app.spec.js",
     "migrate-make": "knex migrate:make",
     "migrate-latest": "knex migrate:latest",
     "dev": "NODE_ENV=test nodemon listen.js"
