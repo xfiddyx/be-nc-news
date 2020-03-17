@@ -5,15 +5,17 @@ exports.up = function(knex) {
       .primary()
       .unique()
       .notNullable();
-    usersTable.string('avatar_url');
-    usersTable.string('name').notNullable();
+    usersTable
+      .string('avatar_url')
+      .unique()
+      .notNullable();
+    usersTable
+      .string('name')
+      .unique()
+      .notNullable();
   });
 };
 
 exports.down = function(knex) {
   return knex.schema.dropTable('users');
 };
-
-// username which is the primary key & unique
-// avatar_url
-// name

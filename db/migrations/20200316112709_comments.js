@@ -1,6 +1,9 @@
 exports.up = function(knex) {
   return knex.schema.createTable('comments', commentsTable => {
-    commentsTable.increments('comments_id').primary();
+    commentsTable
+      .increments('comments_id')
+      .primary()
+      .unique();
     commentsTable
       .string('author')
       .references('users.username')

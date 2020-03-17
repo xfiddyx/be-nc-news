@@ -3,6 +3,7 @@ exports.up = function(knex) {
     topicsTable
       .string('slug')
       .primary()
+      .unique()
       .notNullable();
     topicsTable.string('description').notNullable();
   });
