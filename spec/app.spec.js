@@ -285,21 +285,20 @@ describe('/api', () => {
     });
   });
   describe.only('GET /api/articles', () => {
-    it('returns an articles array of objects', () => {
+    it('returns an articles array of objects with all articles', () => {
       return request(app)
         .get('/api/articles')
         .expect(200)
-        .then(
-          result =>
-            expect(result.body.articles[0]).to.have.all.keys[
-              ('author',
-              'title',
-              'article_id',
-              'topic',
-              'created_at',
-              'votes',
-              'comment_count')
-            ]
+        .then(result =>
+          expect(result.body.articles[0]).to.have.all.keys([
+            'author',
+            'title',
+            'article_id',
+            'topic',
+            'created_at',
+            'votes',
+            'comments_count'
+          ])
         );
     });
   });

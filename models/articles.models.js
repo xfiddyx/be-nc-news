@@ -8,19 +8,24 @@ const getAllArticles = query => {
   //   if (query.order) order = query.order;
   // }
   return connection
-    .select('article_id')
-    .count('article_id as comments_count')
-    .from('comments')
-    .join('articles.article_id')
-    .groupBy('article_id')
-    .then(count => console.log(count));
-  //.groupBy('articles.comment_id');
+    .select(
+      'articles.author',
+      'articles.title',
+      'articles.article_id',
+      'articles.topic',
+      'articles.created_at',
+      'articles.votes'
+    )
+    .from('articles')
+    .count({ comments_count: 'comments.article_id' })
+    .leftOuterJoin(
+      'comments',
+      'articles.article_id',
+      '=',
+      'comments.article_id'
+    )
+    .groupBy('articles.article_id');
 };
-
-//sort_by, which sorts the articles by any valid column (defaults to date)
-// order, which can be set to asc or desc for ascending or descending (defaults to descending)
-// author, which filters the articles by the username value specified in the query
-// topic, which filters the articles by the topic value specified in the query
 
 const getArticles = articleId => {
   return connection
