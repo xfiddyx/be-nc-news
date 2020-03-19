@@ -284,12 +284,12 @@ describe('/api', () => {
         });
     });
   });
-  describe.only('GET /api/articles', () => {
+  describe('GET /api/articles', () => {
     it('returns an articles array of objects with all articles', () => {
       return request(app)
         .get('/api/articles')
         .expect(200)
-        .then(result =>
+        .then(result => {
           expect(result.body.articles[0]).to.have.all.keys([
             'author',
             'title',
@@ -298,8 +298,95 @@ describe('/api', () => {
             'created_at',
             'votes',
             'comments_count'
-          ])
-        );
+          ]);
+          expect(result.body.articles).to.be.sortedBy('created_at', {
+            descending: true
+          });
+        });
+    });
+    it('returns an articles array of objects with all articles with a sort_by query', () => {
+      return request(app)
+        .get('/api/articles?sort_by=votes')
+        .expect(200)
+        .then(result => {
+          expect(result.body.articles).to.be.sortedBy('votes', {
+            descending: true
+          });
+          expect(result.body.articles[0].votes).to.equal(100);
+        });
+    });
+    it('returns an articles array of objects with all articles with a sort_by query AND a order_by query', () => {
+      return request(app)
+        .get('/api/articles?sort_by=article_id&order_by=asc')
+        .expect(200)
+        .then(result => {
+          expect(result.body.articles).to.be.sortedBy('article_id', {
+            ascending: true
+          });
+          expect(result.body.articles[0].article_id).to.equal(1);
+        });
+    });
+    it('returns an articles array of objects with all articles filtered by USERNAME in query', () => {
+      return request(app)
+        .get('/api/articles?author=rogersop')
+        .expect(200)
+        .then(result => {
+          expect(result.body.articles.length).to.equal(3);
+          expect(result.body.articles[0].title).to.equal('Student SUES Mitch!');
+        });
+    });
+    it('returns an articles array of objects with all articles filtered by TOPIC in query', () => {
+      return request(app)
+        .get('/api/articles?topic=cats')
+        .expect(200)
+        .then(result => {
+          expect(result.body.articles.length).to.equal(1);
+          expect(result.body.articles[0].title).to.equal(
+            'UNCOVERED: catspiracy to bring down democracy'
+          );
+        });
+    });
+    it('returns an empty array when the topic is valid but there is no data', () => {
+      return request(app)
+        .get('/api/articles?topic=paper')
+        .expect(200)
+        .then(result => {
+          expect(result.body.articles.length).to.equal(0);
+        });
+    });
+    it('returns an error when sorting by invalid column ', () => {
+      return request(app)
+        .get('/api/articles?sort_by=not_a_column')
+        .expect(400)
+        .then(result => {
+          expect(result.body).to.eql({ msg: 'invalid request' });
+        });
+    });
+  });
+  describe('PATCH /api/comments/:comment_id', () => {
+    it('returns an updated comment with amended votes count', () => {
+      return request(app).patch('/api/comments/:comment_id');
     });
   });
 });
+
+// return request(app)
+//         .patch('/api/articles/5')
+//         .send({ inc_votes: 10 })
+//         .expect(200)
+//         .then(res =>
+//           expect(res.body).to.eql({
+//             updated_article: [
+//               {
+//                 article_id: 5,
+//                 title: 'UNCOVERED: catspiracy to bring down democracy',
+//                 body: 'Bastet walks amongst us, and the cats are taking arms!',
+//                 votes: 10,
+//                 topic: 'cats',
+//                 author: 'rogersop',
+//                 created_at: '2002-11-19T12:21:54.171Z'
+//               }
+//             ]
+//           })
+//         );
+//     });

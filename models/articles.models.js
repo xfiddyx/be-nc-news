@@ -1,12 +1,12 @@
 const connection = require('../connection');
 
 const getAllArticles = query => {
-  // let sortBy = 'created_at';
-  // let order = 'desc';
-  // if (Object.entries(query).length) {
-  //   if (query.sort_by) sortBy = query.sort_by;
-  //   if (query.order) order = query.order;
-  // }
+  let sortBy = 'created_at';
+  let order = 'desc';
+  if (Object.entries(query).length) {
+    if (query.sort_by) sortBy = query.sort_by;
+    if (query.order_by) order = query.order_by;
+  }
   return connection
     .select(
       'articles.author',
@@ -24,7 +24,8 @@ const getAllArticles = query => {
       '=',
       'comments.article_id'
     )
-    .groupBy('articles.article_id');
+    .groupBy('articles.article_id')
+    .orderBy(sortBy, order);
 };
 
 const getArticles = articleId => {
