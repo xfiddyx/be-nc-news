@@ -1,5 +1,27 @@
 const connection = require('../connection');
 
+const getAllArticles = query => {
+  // let sortBy = 'created_at';
+  // let order = 'desc';
+  // if (Object.entries(query).length) {
+  //   if (query.sort_by) sortBy = query.sort_by;
+  //   if (query.order) order = query.order;
+  // }
+  return connection
+    .select('article_id')
+    .count('article_id as comments_count')
+    .from('comments')
+    .join('articles.article_id')
+    .groupBy('article_id')
+    .then(count => console.log(count));
+  //.groupBy('articles.comment_id');
+};
+
+//sort_by, which sorts the articles by any valid column (defaults to date)
+// order, which can be set to asc or desc for ascending or descending (defaults to descending)
+// author, which filters the articles by the username value specified in the query
+// topic, which filters the articles by the topic value specified in the query
+
 const getArticles = articleId => {
   return connection
     .select('*')
@@ -47,4 +69,10 @@ const retrieveComments = (articleId, query) => {
     .orderBy(sortBy, orderBy);
 };
 
-module.exports = { getArticles, updateArticle, postComment, retrieveComments };
+module.exports = {
+  getArticles,
+  updateArticle,
+  postComment,
+  retrieveComments,
+  getAllArticles
+};

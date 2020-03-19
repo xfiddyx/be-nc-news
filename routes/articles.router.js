@@ -3,17 +3,26 @@ const {
   selectArticles,
   patchArticle,
   postArticleComment,
-  getComments
+  getComments,
+  selectAllArticles
 } = require('../controllers/articles.controllers');
+
+articlesRouter.get('/', selectAllArticles);
 
 articlesRouter
   .route('/:article_id')
   .get(selectArticles)
-  .patch(patchArticle);
+  .patch(patchArticle)
+  .all((req, res, next) => {
+    res.status(405).send({ msg: 'method not found' });
+  });
 
 articlesRouter
   .route('/:article_id/comments')
   .get(getComments)
-  .post(postArticleComment);
+  .post(postArticleComment)
+  .all((req, res, next) => {
+    res.status(405).send({ msg: 'method not found' });
+  });
 
 module.exports = articlesRouter;

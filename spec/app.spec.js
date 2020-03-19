@@ -23,6 +23,15 @@ describe('/api', () => {
           expect(res.body.topics.length).to.equal(3);
         });
     });
+    it('throws a 405 error when the method cannot be found', () => {
+      return request(app)
+        .patch('/api/topics')
+        .send({ invalid: 'method request' })
+        .expect(405)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'method not found' });
+        });
+    });
   });
 
   describe('/api/users', () => {
@@ -83,7 +92,7 @@ describe('/api', () => {
       return request(app)
         .get('/api/articles/not_a_number')
         .expect(400)
-        .then(res => expect(res.body).to.eql({ msg: 'invalid id' }));
+        .then(res => expect(res.body).to.eql({ msg: 'invalid request' }));
     });
   });
   describe('PATCH api/articles/:article_id', () => {
@@ -193,7 +202,7 @@ describe('/api', () => {
       return request(app)
         .get('/api/articles/9/comments')
         .expect(200)
-        .then(result =>
+        .then(result => {
           expect(result.body).to.eql([
             {
               comments_id: 1,
@@ -210,14 +219,17 @@ describe('/api', () => {
               created_at: '2001-11-26T12:36:03.389Z',
               body: 'The owls are not what they seem.'
             }
-          ])
-        );
+          ]),
+            expect(result.body).to.be.sortedBy('created_at', {
+              descending: true
+            });
+        });
     });
     it('returns a sort_by query', () => {
       return request(app)
         .get('/api/articles/9/comments?sort_by=votes')
         .expect(200)
-        .then(result =>
+        .then(result => {
           expect(result.body).to.eql([
             {
               comments_id: 17,
@@ -234,14 +246,15 @@ describe('/api', () => {
               body:
                 "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
             }
-          ])
-        );
+          ]),
+            expect(result.body).to.be.sortedBy('votes', { descending: true });
+        });
     });
     it('returns a sort_by query in ascending order - multiple queries', () => {
       return request(app)
         .get('/api/articles/9/comments?sort_by=votes&order_by=asc')
         .expect(200)
-        .then(result =>
+        .then(result => {
           expect(result.body).to.eql([
             {
               comments_id: 1,
@@ -258,7 +271,35 @@ describe('/api', () => {
               created_at: '2001-11-26T12:36:03.389Z',
               body: 'The owls are not what they seem.'
             }
-          ])
+          ]),
+            expect(result.body).to.be.sortedBy('votes', { ascending: true });
+        });
+    });
+    it('returns an error when the column does not exist', () => {
+      return request(app)
+        .get('/api/articles/9/comments?sort_by=invalid_column')
+        .expect(400)
+        .then(result => {
+          expect(result.body).to.eql({ msg: 'invalid request' });
+        });
+    });
+  });
+  describe.only('GET /api/articles', () => {
+    it('returns an articles array of objects', () => {
+      return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(
+          result =>
+            expect(result.body.articles[0]).to.have.all.keys[
+              ('author',
+              'title',
+              'article_id',
+              'topic',
+              'created_at',
+              'votes',
+              'comment_count')
+            ]
         );
     });
   });

@@ -2,8 +2,13 @@ const {
   getArticles,
   updateArticle,
   postComment,
-  retrieveComments
+  retrieveComments,
+  getAllArticles
 } = require('../models/articles.models');
+
+const selectAllArticles = (req, res, next) => {
+  getAllArticles(req.query).then(allArticles => {});
+};
 
 const selectArticles = (req, res, next) => {
   getArticles(req.params.article_id)
@@ -37,5 +42,6 @@ module.exports = {
   selectArticles,
   patchArticle,
   postArticleComment,
-  getComments
+  getComments,
+  selectAllArticles
 };
