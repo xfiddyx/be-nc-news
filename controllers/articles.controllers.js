@@ -9,7 +9,6 @@ const {
 const selectAllArticles = (req, res, next) => {
   getAllArticles(req.query)
     .then(articles => {
-      console.log(articles);
       if (!req.query.author && !req.query.topic) {
         res.status(200).send({ articles });
       } else if (req.query.author) {

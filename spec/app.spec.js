@@ -364,29 +364,98 @@ describe('/api', () => {
     });
   });
   describe('PATCH /api/comments/:comment_id', () => {
-    it('returns an updated comment with amended votes count', () => {
-      return request(app).patch('/api/comments/:comment_id');
+    it('returns an updated comment with vote count increased by 1', () => {
+      return request(app)
+        .patch('/api/comments/1')
+        .send({ inc_votes: 1 })
+        .expect(200)
+        .then(result =>
+          expect(result.body).to.eql({
+            comment: [
+              {
+                comments_id: 1,
+                author: 'butter_bridge',
+                votes: 17,
+                created_at: '2017-11-22T12:36:03.389Z',
+                article_id: 9,
+                body:
+                  "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+              }
+            ]
+          })
+        );
+    });
+    it('returns an updated comment with vote count decreased by 5', () => {
+      return request(app)
+        .patch('/api/comments/1')
+        .send({ inc_votes: -5 })
+        .expect(200)
+        .then(result =>
+          expect(result.body).to.eql({
+            comment: [
+              {
+                comments_id: 1,
+                author: 'butter_bridge',
+                votes: 11,
+                created_at: '2017-11-22T12:36:03.389Z',
+                article_id: 9,
+                body:
+                  "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+              }
+            ]
+          })
+        );
+    });
+    it('returns an error when the comments_id does not exist', () => {
+      return request(app)
+        .patch('/api/comments/999')
+        .send({ inc_votes: 234 })
+        .expect(404)
+        .then(result => expect(result.body).to.eql({ msg: 'not found' }));
+    });
+    it('returns an error when the comments_id is not valid', () => {
+      return request(app)
+        .patch('/api/comments/not_an_integer')
+        .send({ inc_votes: 234 })
+        .expect(400)
+        .then(result => expect(result.body).to.eql({ msg: 'invalid request' }));
+    });
+  });
+  describe('DELETE /api/comments/:comment_id', () => {
+    it('deletes a selected comment', () => {
+      return request(app)
+        .delete('/api/comments/5')
+        .expect(204);
+    });
+    it('returns an error when an id that does not exist is submitted', () => {
+      return request(app)
+        .delete('/api/comments/245')
+        .expect(404)
+        .then(result => {
+          expect(result.body).eql({ msg: 'not found' });
+        });
+    });
+    it('returns an error when an id that does not exist is submitted', () => {
+      return request(app)
+        .delete('/api/comments/not_an_integer')
+        .expect(400)
+        .then(result => {
+          expect(result.body).eql({ msg: 'invalid request' });
+        });
+    });
+  });
+  describe(' GET /api', () => {
+    it('retrieves information about all endpoints', () => {
+      return request(app)
+        .get('/api')
+        .then(result => {
+          expect(result.body.endPoints).to.have.all.keys([
+            'topics',
+            'users',
+            'articles',
+            'comments'
+          ]);
+        });
     });
   });
 });
-
-// return request(app)
-//         .patch('/api/articles/5')
-//         .send({ inc_votes: 10 })
-//         .expect(200)
-//         .then(res =>
-//           expect(res.body).to.eql({
-//             updated_article: [
-//               {
-//                 article_id: 5,
-//                 title: 'UNCOVERED: catspiracy to bring down democracy',
-//                 body: 'Bastet walks amongst us, and the cats are taking arms!',
-//                 votes: 10,
-//                 topic: 'cats',
-//                 author: 'rogersop',
-//                 created_at: '2002-11-19T12:21:54.171Z'
-//               }
-//             ]
-//           })
-//         );
-//     });
