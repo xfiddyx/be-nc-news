@@ -1,5 +1,10 @@
 process.env.NODE_ENV = 'test';
-const { expect } = require('chai');
+
+const chai = require('chai');
+const { expect } = chai;
+const chaiSorted = require('chai-sorted');
+chai.use(chaiSorted);
+
 const request = require('supertest');
 const app = require('../app');
 const connection = require('../connection');
@@ -183,7 +188,7 @@ describe('/api', () => {
         });
     });
   });
-  describe.only('GET /api/articles/:article_id/comments', () => {
+  describe('GET /api/articles/:article_id/comments', () => {
     it('returns a get request for all the comments of a given article sorted by created_at - the default', () => {
       return request(app)
         .get('/api/articles/9/comments')
@@ -232,7 +237,7 @@ describe('/api', () => {
           ])
         );
     });
-    it('returns a sort_by query in ascedning order - multiple queries', () => {
+    it('returns a sort_by query in ascending order - multiple queries', () => {
       return request(app)
         .get('/api/articles/9/comments?sort_by=votes&order_by=asc')
         .expect(200)

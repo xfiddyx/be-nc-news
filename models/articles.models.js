@@ -33,7 +33,6 @@ const postComment = (requestObj, articleId) => {
 };
 
 const retrieveComments = (articleId, query) => {
-  console.log(query);
   if (!query.sort_by) {
     sortBy = 'created_at';
   } else sortBy = query.sort_by;
