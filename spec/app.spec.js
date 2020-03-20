@@ -457,18 +457,4 @@ describe('/api', () => {
         });
     });
   });
-  // describe(' GET /api', () => {
-  //   it('retrieves information about all endpoints', () => {
-  //     return request(app)
-  //       .get('/api')
-  //       .then(result => {
-  //         expect(result.body.endPoints).to.have.all.keys([
-  //           'topics',
-  //           'users',
-  //           'articles',
-  //           'comments'
-  //         ]);
-  //       });
-  //   });
-  // });
 });

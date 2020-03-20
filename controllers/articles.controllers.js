@@ -45,7 +45,6 @@ const patchArticle = (req, res, next) => {
 const postArticleComment = (req, res, next) => {
   postComment(req.body, req.params)
     .then(result => {
-      console.log(result);
       res.status(201).send({ comment: result[0] });
     })
     .catch(next);
