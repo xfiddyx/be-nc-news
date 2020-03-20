@@ -1,6 +1,6 @@
 const articlesRouter = require('express').Router();
 const {
-  selectArticles,
+  selectArticle,
   patchArticle,
   postArticleComment,
   getComments,
@@ -16,7 +16,7 @@ articlesRouter
 
 articlesRouter
   .route('/:article_id')
-  .get(selectArticles)
+  .get(selectArticle)
   .patch(patchArticle)
   .all((req, res, next) => {
     res.status(405).send({ msg: 'method not found' });

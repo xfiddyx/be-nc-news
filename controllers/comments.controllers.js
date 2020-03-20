@@ -5,7 +5,7 @@ const retrieveUpdatedComment = (req, res, next) => {
     .then(comment => {
       if (comment.length === 0) {
         next(404);
-      } else res.status(200).send({ comment });
+      } else res.status(200).send({ comment: comment[0] });
     })
     .catch(next);
 };

@@ -26,19 +26,21 @@ const selectAllArticles = (req, res, next) => {
     .catch(next);
 };
 
-const selectArticles = (req, res, next) => {
+const selectArticle = (req, res, next) => {
   getArticles(req.params.article_id)
     .then(articles => {
       if (articles.length === 0) {
         return next(404);
-      } else res.status(200).send({ article: articles });
+      } else res.status(200).send({ article: articles[0] });
     })
     .catch(next);
 };
 
 const patchArticle = (req, res, next) => {
   updateArticle(req.params.article_id, req.body)
-    .then(updated_article => res.status(200).send({ article: updated_article }))
+    .then(updated_article =>
+      res.status(200).send({ article: updated_article[0] })
+    )
     .catch(next);
 };
 
@@ -53,13 +55,13 @@ const postArticleComment = (req, res, next) => {
 const getComments = (req, res, next) => {
   retrieveComments(req.params.article_id, req.query)
     .then(comments => {
-      res.status(200).send({ comments: comments });
+      res.status(200).send({ comments });
     })
     .catch(next);
 };
 
 module.exports = {
-  selectArticles,
+  selectArticle,
   patchArticle,
   postArticleComment,
   getComments,

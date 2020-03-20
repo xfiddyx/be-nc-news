@@ -30,5 +30,8 @@
     "exampleResponse": {
       "user": {}
     }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "an array of comments for the given article_id of which each comment should have the following properties"
   }
 }

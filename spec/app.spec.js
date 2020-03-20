@@ -68,18 +68,16 @@ describe('/api', () => {
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({
-            article: [
-              {
-                article_id: 1,
-                title: 'Living in the shadow of a great man',
-                body: 'I find this existence challenging',
-                votes: 100,
-                topic: 'mitch',
-                created_at: '2018-11-15T12:21:54.171Z',
-                author: 'butter_bridge',
-                comment_count: '13'
-              }
-            ]
+            article: {
+              article_id: 1,
+              title: 'Living in the shadow of a great man',
+              body: 'I find this existence challenging',
+              votes: 100,
+              topic: 'mitch',
+              created_at: '2018-11-15T12:21:54.171Z',
+              author: 'butter_bridge',
+              comment_count: '13'
+            }
           });
         });
     });
@@ -104,17 +102,15 @@ describe('/api', () => {
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({
-            article: [
-              {
-                article_id: 5,
-                title: 'UNCOVERED: catspiracy to bring down democracy',
-                body: 'Bastet walks amongst us, and the cats are taking arms!',
-                votes: 10,
-                topic: 'cats',
-                author: 'rogersop',
-                created_at: '2002-11-19T12:21:54.171Z'
-              }
-            ]
+            article: {
+              article_id: 5,
+              title: 'UNCOVERED: catspiracy to bring down democracy',
+              body: 'Bastet walks amongst us, and the cats are taking arms!',
+              votes: 10,
+              topic: 'cats',
+              author: 'rogersop',
+              created_at: '2002-11-19T12:21:54.171Z'
+            }
           });
         });
     });
@@ -125,17 +121,15 @@ describe('/api', () => {
         .expect(200)
         .then(res =>
           expect(res.body).to.eql({
-            article: [
-              {
-                article_id: 5,
-                title: 'UNCOVERED: catspiracy to bring down democracy',
-                body: 'Bastet walks amongst us, and the cats are taking arms!',
-                votes: 0,
-                topic: 'cats',
-                author: 'rogersop',
-                created_at: '2002-11-19T12:21:54.171Z'
-              }
-            ]
+            article: {
+              article_id: 5,
+              title: 'UNCOVERED: catspiracy to bring down democracy',
+              body: 'Bastet walks amongst us, and the cats are taking arms!',
+              votes: 0,
+              topic: 'cats',
+              author: 'rogersop',
+              created_at: '2002-11-19T12:21:54.171Z'
+            }
           })
         );
     });
@@ -146,17 +140,15 @@ describe('/api', () => {
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({
-            article: [
-              {
-                article_id: 1,
-                title: 'Living in the shadow of a great man',
-                body: 'I find this existence challenging',
-                votes: 90,
-                topic: 'mitch',
-                author: 'butter_bridge',
-                created_at: '2018-11-15T12:21:54.171Z'
-              }
-            ]
+            article: {
+              article_id: 1,
+              title: 'Living in the shadow of a great man',
+              body: 'I find this existence challenging',
+              votes: 90,
+              topic: 'mitch',
+              author: 'butter_bridge',
+              created_at: '2018-11-15T12:21:54.171Z'
+            }
           });
         });
     });
@@ -384,17 +376,15 @@ describe('/api', () => {
         .expect(200)
         .then(result =>
           expect(result.body).to.eql({
-            comment: [
-              {
-                comments_id: 1,
-                author: 'butter_bridge',
-                votes: 17,
-                created_at: '2017-11-22T12:36:03.389Z',
-                article_id: 9,
-                body:
-                  "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
-              }
-            ]
+            comment: {
+              comments_id: 1,
+              author: 'butter_bridge',
+              votes: 17,
+              created_at: '2017-11-22T12:36:03.389Z',
+              article_id: 9,
+              body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+            }
           })
         );
     });
@@ -405,17 +395,15 @@ describe('/api', () => {
         .expect(200)
         .then(result =>
           expect(result.body).to.eql({
-            comment: [
-              {
-                comments_id: 1,
-                author: 'butter_bridge',
-                votes: 11,
-                created_at: '2017-11-22T12:36:03.389Z',
-                article_id: 9,
-                body:
-                  "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
-              }
-            ]
+            comment: {
+              comments_id: 1,
+              author: 'butter_bridge',
+              votes: 11,
+              created_at: '2017-11-22T12:36:03.389Z',
+              article_id: 9,
+              body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+            }
           })
         );
     });
@@ -432,6 +420,25 @@ describe('/api', () => {
         .send({ inc_votes: 234 })
         .expect(400)
         .then(result => expect(result.body).to.eql({ msg: 'invalid request' }));
+    });
+    it('returns an unchanged comment when no inc_votes key is sent', () => {
+      return request(app)
+        .patch('/api/comments/1')
+        .send({})
+        .expect(200)
+        .then(result =>
+          expect(result.body).to.eql({
+            comment: {
+              comments_id: 1,
+              author: 'butter_bridge',
+              votes: 16,
+              created_at: '2017-11-22T12:36:03.389Z',
+              article_id: 9,
+              body:
+                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+            }
+          })
+        );
     });
   });
   describe('DELETE /api/comments/:comment_id', () => {
