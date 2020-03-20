@@ -6,6 +6,7 @@ const selectUser = (req, res, next) => {
       if (user.length === 0) {
         return next(404);
       }
+      console.log(res.body);
       res.status(200).send({ user });
     })
     .catch(next);

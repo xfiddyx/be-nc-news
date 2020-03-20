@@ -25,29 +25,10 @@
     }
   },
   "GET /users/:username": {
-    "description": "serves an array of the details for the selected user  "
+    "description": "serves an array of the details for the selected user",
+    "queries": [],
+    "exampleResponse": {
+      "user": {}
+    }
   }
 }
-//         users: {
-//           GET:
-//             'retrieves the information held on the user requested on the parametric endpoint e.g  /api/users/john_doe'
-//       },
-//         articles: {
-//           GET: 'retrieves all articles',
-//           GET:
-//             'retrieves the information held on the article requested on the parametric endpoint e.g /api/articles/1',
-//           PATCH:
-//             'retrieves the updated information held on an article following successful PATCH request e.g /api/articles/1',
-//           POST:
-//             'retrieves the updated information held on an articles comments following successful POST request e.g. /api/articles/1/comments',
-//           GET:
-//             'retrieves information held on an article following successful GET request e.g. /api/articles/1/comments'
-//       },
-//         comments: {
-//           PATCH:
-//             'retrieves updated information held on comment requested at parametric endpoint e.g. /api/comments/1',
-//           DELETE:
-//             'deletes all information related to comment requested at parametric endpoint e.g./api/comments/1 returns no information if successful.'
-//       }
-//     }
-//   });
