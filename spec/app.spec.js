@@ -200,12 +200,11 @@ describe('/api', () => {
           ]);
         });
     });
-
     it('returns an error when an invalid id used', () => {
       return request(app)
         .post('/api/articles/74/comments')
         .send({ username: 'butter_bridge', body: 'Posting a comment!' })
-        .expect(400)
+        .expect(404)
         .then(res => {
           expect(res.body).to.eql({
             msg: 'invalid request'
@@ -216,7 +215,7 @@ describe('/api', () => {
       return request(app)
         .post('/api/articles/74/comments')
         .send({ username: 'not-a-username', body: 'Posting a comment!' })
-        .expect(400)
+        .expect(404)
         .then(res => {
           expect(res.body).to.eql({
             msg: 'invalid request'
@@ -224,7 +223,7 @@ describe('/api', () => {
         });
     });
   });
-  describe.only('GET /api/articles/:article_id/comments', () => {
+  describe('GET /api/articles/:article_id/comments', () => {
     it('returns a get request for all the comments of a given article sorted by created_at - the default', () => {
       return request(app)
         .get('/api/articles/9/comments')

@@ -2,7 +2,7 @@ const psqlErrors = (err, req, res, next) => {
   const errorCodeObj = {
     '22P02': { message: 'invalid request', status: 400 },
     '23502': { message: 'bad request', status: 400 },
-    '23503': { message: 'invalid request', status: 400 },
+    '23503': { message: 'invalid request', status: 404 },
     '42703': { message: 'invalid request', status: 400 }
   };
   if (errorCodeObj[err.code]) {
