@@ -105,13 +105,20 @@ const retrieveComments = (articleId, query) => {
     orderBy = 'desc';
   } else orderBy = query.order_by;
 
-  return connection
+  const comments = connection
     .select('comments_id', 'votes', 'created_at', 'author', 'body')
     .from('comments')
     .where('comments.article_id', '=', articleId)
     .orderBy(sortBy, orderBy);
+  return Promise.all([
+    checkExists('articles', 'article_id', articleId),
+    comments
+  ]).then(([value, comments]) => {
+    if (!value) {
+      return Promise.reject(404);
+    } else return comments;
+  });
 };
-
 const checkExists = (table, column, query) => {
   return connection(table)
     .select()

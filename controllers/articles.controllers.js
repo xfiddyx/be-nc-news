@@ -28,10 +28,10 @@ const selectAllArticles = (req, res, next) => {
 
 const selectArticles = (req, res, next) => {
   getArticles(req.params.article_id)
-    .then(article => {
-      if (article.length === 0) {
+    .then(articles => {
+      if (articles.length === 0) {
         return next(404);
-      } else res.status(200).send({ article });
+      } else res.status(200).send({ article: articles });
     })
     .catch(next);
 };
@@ -50,7 +50,9 @@ const postArticleComment = (req, res, next) => {
 
 const getComments = (req, res, next) => {
   retrieveComments(req.params.article_id, req.query)
-    .then(comments => res.status(200).send({ comments }))
+    .then(comments => {
+      res.status(200).send({ comments: comments });
+    })
     .catch(next);
 };
 

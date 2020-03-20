@@ -102,7 +102,7 @@ describe('/api', () => {
         .patch('/api/articles/5')
         .send({ inc_votes: 10 })
         .expect(200)
-        .then(res =>
+        .then(res => {
           expect(res.body).to.eql({
             article: [
               {
@@ -115,8 +115,8 @@ describe('/api', () => {
                 created_at: '2002-11-19T12:21:54.171Z'
               }
             ]
-          })
-        );
+          });
+        });
     });
     it('responds with the article, unamended when no body is sent', () => {
       return request(app)
@@ -224,59 +224,42 @@ describe('/api', () => {
         });
     });
   });
-  describe('GET /api/articles/:article_id/comments', () => {
+  describe.only('GET /api/articles/:article_id/comments', () => {
     it('returns a get request for all the comments of a given article sorted by created_at - the default', () => {
       return request(app)
         .get('/api/articles/9/comments')
         .expect(200)
         .then(result => {
-          expect(result.body.comments).to.eql([
-            {
-              comments_id: 1,
-              author: 'butter_bridge',
-              votes: 16,
-              created_at: '2017-11-22T12:36:03.389Z',
-              body:
-                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
-            },
-            {
-              comments_id: 17,
-              author: 'icellusedkars',
-              votes: 20,
-              created_at: '2001-11-26T12:36:03.389Z',
-              body: 'The owls are not what they seem.'
-            }
-          ]),
+          expect(result.body).to.eql({
+            comments: [
+              {
+                comments_id: 1,
+                author: 'butter_bridge',
+                votes: 16,
+                created_at: '2017-11-22T12:36:03.389Z',
+                body:
+                  "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+              },
+              {
+                comments_id: 17,
+                author: 'icellusedkars',
+                votes: 20,
+                created_at: '2001-11-26T12:36:03.389Z',
+                body: 'The owls are not what they seem.'
+              }
+            ]
+          }),
             expect(result.body.comments).to.be.sortedBy('created_at', {
               descending: true
             });
         });
     });
-    it('returns a sort_by query', () => {
+    it('returns an error for article id that does not exist ', () => {
       return request(app)
-        .get('/api/articles/9/comments?sort_by=votes')
-        .expect(200)
+        .get('/api/articles/999/comments')
+        .expect(404)
         .then(result => {
-          expect(result.body.comments).to.eql([
-            {
-              comments_id: 17,
-              author: 'icellusedkars',
-              votes: 20,
-              created_at: '2001-11-26T12:36:03.389Z',
-              body: 'The owls are not what they seem.'
-            },
-            {
-              comments_id: 1,
-              author: 'butter_bridge',
-              votes: 16,
-              created_at: '2017-11-22T12:36:03.389Z',
-              body:
-                "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
-            }
-          ]),
-            expect(result.body.comments).to.be.sortedBy('votes', {
-              descending: true
-            });
+          expect(result.body).to.eql({ msg: 'not found' });
         });
     });
     it('returns a sort_by query in ascending order - multiple queries', () => {
