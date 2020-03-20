@@ -11,6 +11,7 @@ app.use(express.json());
 app.use('/api', apiRouter);
 
 app.use(statusCodeErrors);
+
 app.use(psqlErrors);
 
 module.exports = app;

@@ -5,6 +5,7 @@ const articlesRouter = require('./articles.router');
 const commentsRouter = require('./comments.router');
 
 const endPoints = require('../endpoints.json');
+
 apiRouter.use('/topics', topicsRouter);
 
 apiRouter.use('/users', usersRouter);
