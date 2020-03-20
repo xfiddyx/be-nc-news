@@ -2,12 +2,19 @@ const connection = require('../connection');
 
 const getAllArticles = query => {
   let sortBy = 'created_at';
-  let order = 'desc';
+  let ord = 'desc';
   if (Object.entries(query).length) {
     if (query.sort_by) sortBy = query.sort_by;
-    if (query.order_by) order = query.order_by;
+    if (query.order) ord = query.order;
   }
-  return connection
+  let checker;
+  if (query.topic) {
+    checker = checkExists('topics', 'slug', query.topic);
+  } else if (query.author) {
+    checker = checkExists('users', 'username', query.author);
+  } else checker = 'nothing to check';
+
+  const articlesData = connection
     .select(
       'articles.author',
       'articles.title',
@@ -17,7 +24,7 @@ const getAllArticles = query => {
       'articles.votes'
     )
     .from('articles')
-    .count({ comments_count: 'comments.article_id' })
+    .count({ comment_count: 'comments.article_id' })
     .leftOuterJoin(
       'comments',
       'articles.article_id',
@@ -25,28 +32,58 @@ const getAllArticles = query => {
       'comments.article_id'
     )
     .groupBy('articles.article_id')
-    .orderBy(sortBy, order);
-};
+    .orderBy(sortBy, ord);
 
+  return Promise.all([checker, articlesData]).then(
+    ([checker, articlesData]) => {
+      if (!checker) {
+        return Promise.reject(404);
+      } else return articlesData;
+    }
+  );
+};
 const getArticles = articleId => {
   return connection
-    .select('*')
+    .select(
+      'articles.author',
+      'articles.title',
+      'articles.article_id',
+      'articles.topic',
+      'articles.created_at',
+      'articles.votes',
+      'articles.body'
+    )
     .from('articles')
-    .whereRaw(`articles.article_id = ${articleId}`);
+    .where('articles.article_id', articleId)
+    .count({ comment_count: 'comments.article_id' })
+    .leftOuterJoin(
+      'comments',
+      'articles.article_id',
+      '=',
+      'comments.article_id'
+    )
+    .groupBy('articles.article_id');
 };
 
 const updateArticle = (articleId, update) => {
+  if (isNaN(update.inc_votes) && Object.keys(update).length) {
+    return Promise.reject(400);
+  }
+
   if (update.inc_votes > 0) {
     return connection('articles')
       .where('article_id', '=', articleId)
       .increment({ votes: update.inc_votes })
       .returning('*');
-  } else {
+  } else if (update.inc_votes < 0) {
     return connection('articles')
       .where('article_id', '=', articleId)
       .decrement({ votes: Math.abs(update.inc_votes) })
       .returning('*');
-  }
+  } else
+    return connection('articles')
+      .where('article_id', '=', articleId)
+      .returning('*');
 };
 
 const postComment = (requestObj, articleId) => {
@@ -73,6 +110,13 @@ const retrieveComments = (articleId, query) => {
     .from('comments')
     .where('comments.article_id', '=', articleId)
     .orderBy(sortBy, orderBy);
+};
+
+const checkExists = (table, column, query) => {
+  return connection(table)
+    .select()
+    .where({ [column]: query })
+    .first();
 };
 
 module.exports = {

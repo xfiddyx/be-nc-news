@@ -66,7 +66,7 @@ describe('/api', () => {
       return request(app)
         .get('/api/articles/1')
         .expect(200)
-        .then(res =>
+        .then(res => {
           expect(res.body).to.eql({
             article: [
               {
@@ -76,11 +76,12 @@ describe('/api', () => {
                 votes: 100,
                 topic: 'mitch',
                 created_at: '2018-11-15T12:21:54.171Z',
-                author: 'butter_bridge'
+                author: 'butter_bridge',
+                comment_count: '13'
               }
             ]
-          })
-        );
+          });
+        });
     });
     it('returns an error a id that does not exist but is valid', () => {
       return request(app)
@@ -103,12 +104,33 @@ describe('/api', () => {
         .expect(200)
         .then(res =>
           expect(res.body).to.eql({
-            updated_article: [
+            article: [
               {
                 article_id: 5,
                 title: 'UNCOVERED: catspiracy to bring down democracy',
                 body: 'Bastet walks amongst us, and the cats are taking arms!',
                 votes: 10,
+                topic: 'cats',
+                author: 'rogersop',
+                created_at: '2002-11-19T12:21:54.171Z'
+              }
+            ]
+          })
+        );
+    });
+    it('responds with the article, unamended when no body is sent', () => {
+      return request(app)
+        .patch('/api/articles/5')
+        .send({})
+        .expect(200)
+        .then(res =>
+          expect(res.body).to.eql({
+            article: [
+              {
+                article_id: 5,
+                title: 'UNCOVERED: catspiracy to bring down democracy',
+                body: 'Bastet walks amongst us, and the cats are taking arms!',
+                votes: 0,
                 topic: 'cats',
                 author: 'rogersop',
                 created_at: '2002-11-19T12:21:54.171Z'
@@ -124,7 +146,7 @@ describe('/api', () => {
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({
-            updated_article: [
+            article: [
               {
                 article_id: 1,
                 title: 'Living in the shadow of a great man',
@@ -166,11 +188,16 @@ describe('/api', () => {
       return request(app)
         .post('/api/articles/1/comments')
         .send({ username: 'butter_bridge', body: 'Posting a comment!' })
-        .expect(200)
+        .expect(201)
         .then(res => {
-          expect(res.body).to.eql({
-            comment: 'Posting a comment!'
-          });
+          expect(res.body.comment).to.have.all.keys([
+            'comments_id',
+            'author',
+            'article_id',
+            'votes',
+            'created_at',
+            'body'
+          ]);
         });
     });
 
@@ -203,7 +230,7 @@ describe('/api', () => {
         .get('/api/articles/9/comments')
         .expect(200)
         .then(result => {
-          expect(result.body).to.eql([
+          expect(result.body.comments).to.eql([
             {
               comments_id: 1,
               author: 'butter_bridge',
@@ -220,7 +247,7 @@ describe('/api', () => {
               body: 'The owls are not what they seem.'
             }
           ]),
-            expect(result.body).to.be.sortedBy('created_at', {
+            expect(result.body.comments).to.be.sortedBy('created_at', {
               descending: true
             });
         });
@@ -230,7 +257,7 @@ describe('/api', () => {
         .get('/api/articles/9/comments?sort_by=votes')
         .expect(200)
         .then(result => {
-          expect(result.body).to.eql([
+          expect(result.body.comments).to.eql([
             {
               comments_id: 17,
               author: 'icellusedkars',
@@ -247,7 +274,9 @@ describe('/api', () => {
                 "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
             }
           ]),
-            expect(result.body).to.be.sortedBy('votes', { descending: true });
+            expect(result.body.comments).to.be.sortedBy('votes', {
+              descending: true
+            });
         });
     });
     it('returns a sort_by query in ascending order - multiple queries', () => {
@@ -255,7 +284,7 @@ describe('/api', () => {
         .get('/api/articles/9/comments?sort_by=votes&order_by=asc')
         .expect(200)
         .then(result => {
-          expect(result.body).to.eql([
+          expect(result.body.comments).to.eql([
             {
               comments_id: 1,
               author: 'butter_bridge',
@@ -272,7 +301,9 @@ describe('/api', () => {
               body: 'The owls are not what they seem.'
             }
           ]),
-            expect(result.body).to.be.sortedBy('votes', { ascending: true });
+            expect(result.body.comments).to.be.sortedBy('votes', {
+              ascending: true
+            });
         });
     });
     it('returns an error when the column does not exist', () => {
@@ -297,7 +328,7 @@ describe('/api', () => {
             'topic',
             'created_at',
             'votes',
-            'comments_count'
+            'comment_count'
           ]);
           expect(result.body.articles).to.be.sortedBy('created_at', {
             descending: true
@@ -317,7 +348,7 @@ describe('/api', () => {
     });
     it('returns an articles array of objects with all articles with a sort_by query AND a order_by query', () => {
       return request(app)
-        .get('/api/articles?sort_by=article_id&order_by=asc')
+        .get('/api/articles?sort_by=article_id&order=asc')
         .expect(200)
         .then(result => {
           expect(result.body.articles).to.be.sortedBy('article_id', {
@@ -435,7 +466,7 @@ describe('/api', () => {
           expect(result.body).eql({ msg: 'not found' });
         });
     });
-    it('returns an error when an id that does not exist is submitted', () => {
+    it('returns an error when an id that is not valid', () => {
       return request(app)
         .delete('/api/comments/not_an_integer')
         .expect(400)

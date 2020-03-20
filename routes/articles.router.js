@@ -7,7 +7,12 @@ const {
   selectAllArticles
 } = require('../controllers/articles.controllers');
 
-articlesRouter.get('/', selectAllArticles);
+articlesRouter
+  .route('/')
+  .get(selectAllArticles)
+  .all((req, res, next) => {
+    res.status(405).send({ msg: 'method not found' });
+  });
 
 articlesRouter
   .route('/:article_id')
