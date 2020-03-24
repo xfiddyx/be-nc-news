@@ -41,14 +41,12 @@ describe('/api', () => {
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({
-            user: [
-              {
-                username: 'lurker',
-                avatar_url:
-                  'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
-                name: 'do_nothing'
-              }
-            ]
+            user: {
+              username: 'lurker',
+              avatar_url:
+                'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+              name: 'do_nothing'
+            }
           });
         });
     });
@@ -182,6 +180,7 @@ describe('/api', () => {
         .send({ username: 'butter_bridge', body: 'Posting a comment!' })
         .expect(201)
         .then(res => {
+          console.log(res.body);
           expect(res.body.comment).to.have.all.keys([
             'comments_id',
             'author',
@@ -374,7 +373,7 @@ describe('/api', () => {
         .patch('/api/comments/1')
         .send({ inc_votes: 1 })
         .expect(200)
-        .then(result =>
+        .then(result => {
           expect(result.body).to.eql({
             comment: {
               comments_id: 1,
@@ -385,8 +384,8 @@ describe('/api', () => {
               body:
                 "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
             }
-          })
-        );
+          });
+        });
     });
     it('returns an updated comment with vote count decreased by 5', () => {
       return request(app)
