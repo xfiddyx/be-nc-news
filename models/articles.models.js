@@ -101,15 +101,15 @@ const retrieveComments = (articleId, query) => {
   if (!query.sort_by) {
     sortBy = 'created_at';
   } else sortBy = query.sort_by;
-  if (!query.order_by) {
-    orderBy = 'desc';
-  } else orderBy = query.order_by;
+  if (!query.order) {
+    ord = 'desc';
+  } else ord = query.order;
 
   const comments = connection
-    .select('comments_id', 'votes', 'created_at', 'author', 'body')
+    .select('comment_id', 'votes', 'created_at', 'author', 'body')
     .from('comments')
     .where('comments.article_id', '=', articleId)
-    .orderBy(sortBy, orderBy);
+    .orderBy(sortBy, ord);
   return Promise.all([
     checkExists('articles', 'article_id', articleId),
     comments

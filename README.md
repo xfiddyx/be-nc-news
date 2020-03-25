@@ -67,7 +67,7 @@ This project has been built with
 
 ## Endpoints
 
-A list of all the ends can be point in the endpoints.json file
+A list of all the endpoints available can be found in the endpoints.json file
 
 ## Authors
 

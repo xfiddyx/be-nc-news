@@ -181,7 +181,7 @@ describe('/api', () => {
         .expect(201)
         .then(res => {
           expect(res.body.comment).to.have.all.keys([
-            'comments_id',
+            'comment_id',
             'author',
             'article_id',
             'votes',
@@ -222,7 +222,7 @@ describe('/api', () => {
           expect(result.body).to.eql({
             comments: [
               {
-                comments_id: 1,
+                comment_id: 1,
                 author: 'butter_bridge',
                 votes: 16,
                 created_at: '2017-11-22T12:36:03.389Z',
@@ -230,7 +230,7 @@ describe('/api', () => {
                   "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
               },
               {
-                comments_id: 17,
+                comment_id: 17,
                 author: 'icellusedkars',
                 votes: 20,
                 created_at: '2001-11-26T12:36:03.389Z',
@@ -253,12 +253,12 @@ describe('/api', () => {
     });
     it('returns a sort_by query in ascending order - multiple queries', () => {
       return request(app)
-        .get('/api/articles/9/comments?sort_by=votes&order_by=asc')
+        .get('/api/articles/9/comments?sort_by=votes&order=asc')
         .expect(200)
         .then(result => {
           expect(result.body.comments).to.eql([
             {
-              comments_id: 1,
+              comment_id: 1,
               author: 'butter_bridge',
               votes: 16,
               created_at: '2017-11-22T12:36:03.389Z',
@@ -266,7 +266,7 @@ describe('/api', () => {
                 "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
             },
             {
-              comments_id: 17,
+              comment_id: 17,
               author: 'icellusedkars',
               votes: 20,
               created_at: '2001-11-26T12:36:03.389Z',
@@ -318,7 +318,7 @@ describe('/api', () => {
           expect(result.body.articles[0].votes).to.equal(100);
         });
     });
-    it('returns an articles array of objects with all articles with a sort_by query AND a order_by query', () => {
+    it('returns an articles array of objects with all articles with a sort_by query AND a order query', () => {
       return request(app)
         .get('/api/articles?sort_by=article_id&order=asc')
         .expect(200)
@@ -375,7 +375,7 @@ describe('/api', () => {
         .then(result => {
           expect(result.body).to.eql({
             comment: {
-              comments_id: 1,
+              comment_id: 1,
               author: 'butter_bridge',
               votes: 17,
               created_at: '2017-11-22T12:36:03.389Z',
@@ -394,7 +394,7 @@ describe('/api', () => {
         .then(result =>
           expect(result.body).to.eql({
             comment: {
-              comments_id: 1,
+              comment_id: 1,
               author: 'butter_bridge',
               votes: 11,
               created_at: '2017-11-22T12:36:03.389Z',
@@ -405,14 +405,14 @@ describe('/api', () => {
           })
         );
     });
-    it('returns an error when the comments_id does not exist', () => {
+    it('returns an error when the comment_id does not exist', () => {
       return request(app)
         .patch('/api/comments/999')
         .send({ inc_votes: 234 })
         .expect(404)
         .then(result => expect(result.body).to.eql({ msg: 'not found' }));
     });
-    it('returns an error when the comments_id is not valid', () => {
+    it('returns an error when the comment_id is not valid', () => {
       return request(app)
         .patch('/api/comments/not_an_integer')
         .send({ inc_votes: 234 })
@@ -427,7 +427,7 @@ describe('/api', () => {
         .then(result =>
           expect(result.body).to.eql({
             comment: {
-              comments_id: 1,
+              comment_id: 1,
               author: 'butter_bridge',
               votes: 16,
               created_at: '2017-11-22T12:36:03.389Z',

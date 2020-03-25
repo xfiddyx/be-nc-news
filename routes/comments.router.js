@@ -5,7 +5,7 @@ const {
 } = require('../controllers/comments.controllers');
 
 commentsRouter
-  .route('/:comments_id')
+  .route('/:comment_id')
   .patch(retrieveUpdatedComment)
   .delete(mattHardy)
   .all((req, res, next) => {

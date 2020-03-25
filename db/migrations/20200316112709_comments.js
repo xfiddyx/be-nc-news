@@ -1,7 +1,7 @@
 exports.up = function(knex) {
   return knex.schema.createTable('comments', commentsTable => {
     commentsTable
-      .increments('comments_id')
+      .increments('comment_id')
       .primary()
       .unique();
     commentsTable
