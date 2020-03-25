@@ -20,7 +20,7 @@ const updateComment = (commentId, update) => {
   });
 };
 
-const iWillDeleteYou = commentId => {
+const deleteComment = commentId => {
   return connection('comments')
     .where({ comment_id: commentId })
     .del();
@@ -33,4 +33,4 @@ const checkExists = (table, column, query) => {
     .first();
 };
 
-module.exports = { updateComment, iWillDeleteYou };
+module.exports = { updateComment, deleteComment };

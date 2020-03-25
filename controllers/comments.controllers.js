@@ -1,4 +1,4 @@
-const { updateComment, iWillDeleteYou } = require('../models/comments.models');
+const { updateComment, deleteComment } = require('../models/comments.models');
 
 const retrieveUpdatedComment = (req, res, next) => {
   updateComment(req.params.comment_id, req.body)
@@ -10,8 +10,8 @@ const retrieveUpdatedComment = (req, res, next) => {
     .catch(next);
 };
 
-const mattHardy = (req, res, next) => {
-  iWillDeleteYou(req.params.comment_id)
+const reqDelete = (req, res, next) => {
+  deleteComment(req.params.comment_id)
     .then(result => {
       if (result === 0) {
         next(404);
@@ -21,4 +21,4 @@ const mattHardy = (req, res, next) => {
     })
     .catch(next);
 };
-module.exports = { retrieveUpdatedComment, mattHardy };
+module.exports = { retrieveUpdatedComment, reqDelete };
