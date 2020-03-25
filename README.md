@@ -1,4 +1,4 @@
-#BACKEND NORTHCODERS NEWS API
+# BACKEND NORTHCODERS NEWS API
 
 This is a backend project that demonstrates the use of a RESTful API
 
@@ -6,9 +6,9 @@ It has been built the Node.js web application framework, Express and the Postgre
 
 There is a test, development and production environment that has been provided.
 
-The API can be found here: https://nc-news-odishon.herokuapp.com/api
+The API can be found [here](https://nc-news-odishon.herokuapp.com/api)
 
-##Getting Started
+## Getting Started
 
 To run this project you will need a minimum of
 
