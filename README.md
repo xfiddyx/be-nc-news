@@ -18,9 +18,9 @@ To run this project you will need a minimum of
 
 For further details on how to install the above, see:
 
-- https://nodejs.org/en/
-- https://www.npmjs.com/
-- https://www.postgresql.org/
+- [Node](https://nodejs.org/en/)
+- [NPM](https://www.npmjs.com/)
+- [Postgres](https://www.postgresql.org/)
 
 #### To install all dependencies
 
@@ -55,15 +55,20 @@ npm run seed
 ### Built With
 
 This project has been built with
-[chai-sorted](https://www.chaijs.com/plugins/chai-sorted/)
-[express](https://www.progress.com/tutorials/jdbc/connect-to-postgresql-on-heroku-using-odbc-and-jdbc-drivers)
-[knex](http://knexjs.org/)
-[pg](https://www.postgresql.org/)
-[supertest](https://www.npmjs.com/package/supertest)
-[chai](https://www.chaijs.com/)
-[mocha](https://mochajs.org/)
-[nodemon](https://nodemon.io/)
+
+- [chai-sorted](https://www.chaijs.com/plugins/chai-sorted/)
+- [express](https://www.progress.com/tutorials/jdbc/connect-to-postgresql-on-heroku-using-odbc-and-jdbc-drivers)
+- [knex](http://knexjs.org/)
+- [pg](https://www.postgresql.org/)
+- [supertest](https://www.npmjs.com/package/supertest)
+- [chai](https://www.chaijs.com/)
+- [mocha](https://mochajs.org/)
+- [nodemon](https://nodemon.io/)
 
 ## Endpoints
 
 A list of all the ends can be point in the endpoints.json file
+
+## Authors
+
+Steven Woods - Initial work - [xfiddyx](www.github.com/xfiddyx)
