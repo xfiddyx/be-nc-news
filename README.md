@@ -22,27 +22,37 @@ For further details on how to install the above, see:
 - https://www.npmjs.com/
 - https://www.postgresql.org/
 
-To install all dependencies
+#### To install all dependencies
 
+```
 npm install
+```
 
-To test the utils functions
+#### To test the utils functions
 
+```
 npm run test-utils
+```
 
-To test the app.spec
+#### To test the app.spec
 
+```
 npm test
+```
 
-To setup the initial database
+#### To setup the initial database
 
+```
 npm setup-dbs
+```
 
-To run seed file
+#### To run seed file
 
+```
 npm run seed
+```
 
-Built With
+### Built With
 
 This project has been built with
 [chai-sorted](https://www.chaijs.com/plugins/chai-sorted/)
@@ -54,6 +64,6 @@ This project has been built with
 [mocha](https://mochajs.org/)
 [nodemon](https://nodemon.io/)
 
-Endpoints
+## Endpoints
 
 A list of all the ends can be point in the endpoints.json file
