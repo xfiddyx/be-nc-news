@@ -1,6 +1,5 @@
 const ENV = process.env.NODE_ENV || 'development';
 const { DB_URL } = process.env;
-
 const baseConfig = {
   client: 'pg',
   migrations: {
@@ -26,5 +25,4 @@ const customConfig = {
     connection: `${DB_URL}?ssl=true`
   }
 };
-
 module.exports = { ...customConfig[ENV], ...baseConfig };

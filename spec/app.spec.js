@@ -180,7 +180,6 @@ describe('/api', () => {
         .send({ username: 'butter_bridge', body: 'Posting a comment!' })
         .expect(201)
         .then(res => {
-          console.log(res.body);
           expect(res.body.comment).to.have.all.keys([
             'comments_id',
             'author',
