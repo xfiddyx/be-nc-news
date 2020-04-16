@@ -1,6 +1,6 @@
 const connection = require('../connection');
 
-const getAllArticles = query => {
+const getAllArticles = (query) => {
   let sortBy = 'created_at';
   let ord = 'desc';
   if (Object.entries(query).length) {
@@ -42,7 +42,7 @@ const getAllArticles = query => {
     }
   );
 };
-const getArticles = articleId => {
+const getArticles = (articleId) => {
   return connection
     .select(
       'articles.author',
@@ -91,7 +91,7 @@ const postComment = (requestObj, articleId) => {
     .insert({
       body: requestObj.body,
       author: requestObj.username,
-      article_id: articleId.article_id
+      article_id: articleId.article_id,
     })
     .into('comments')
     .returning('*');
@@ -112,7 +112,7 @@ const retrieveComments = (articleId, query) => {
     .orderBy(sortBy, ord);
   return Promise.all([
     checkExists('articles', 'article_id', articleId),
-    comments
+    comments,
   ]).then(([value, comments]) => {
     if (!value) {
       return Promise.reject(404);
@@ -131,5 +131,5 @@ module.exports = {
   updateArticle,
   postComment,
   retrieveComments,
-  getAllArticles
+  getAllArticles,
 };
