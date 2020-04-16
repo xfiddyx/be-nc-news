@@ -106,7 +106,7 @@ const retrieveComments = (articleId, query) => {
   } else ord = query.order;
 
   const comments = connection
-    .select('comment_id', 'votes', 'created_at', 'author', 'body')
+    .select('comments.comment_id', 'votes', 'created_at', 'author', 'body')
     .from('comments')
     .where('comments.article_id', '=', articleId)
     .orderBy(sortBy, ord);
