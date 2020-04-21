@@ -35,7 +35,6 @@ const getAllArticles = (query) => {
     .orderBy(sortBy, ord);
   return Promise.all([checker, articlesData]).then(
     ([checker, articlesData]) => {
-      console.log(articlesData);
       if (!checker) {
         return Promise.reject(404);
       } else return articlesData;
