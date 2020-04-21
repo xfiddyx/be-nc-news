@@ -14,8 +14,9 @@ articlesRouter
   .all((req, res, next) => {
     res.status(405).send({ msg: 'method not found' });
   });
+
 articlesRouter
-  .route('/homepage')
+  .route('/article')
   .get(getRandomArticle)
   .all((req, res, next) => {
     res.status(405).send({ msg: 'method not found' });

@@ -213,7 +213,7 @@ describe('/api', () => {
         });
     });
   });
-  describe.only('GET /api/articles/:article_id/comments', () => {
+  describe('GET /api/articles/:article_id/comments', () => {
     it('returns a get request for all the comments of a given article sorted by created_at - the default', () => {
       return request(app)
         .get('/api/articles/9/comments')

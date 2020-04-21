@@ -37,8 +37,9 @@ const selectArticle = (req, res, next) => {
 };
 
 const getRandomArticle = (req, res, next) => {
-  getAllArticles()
+  getAllArticles(req.query)
     .then((articles) => {
+      console.log('i am here');
       const randomArticle =
         articles[Math.floor(Math.random() * articles.length)];
       res.status(200).send({ article: randomArticle });
