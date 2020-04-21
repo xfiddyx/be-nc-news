@@ -64,6 +64,18 @@ const getArticles = (articleId) => {
     .groupBy('articles.article_id');
 };
 
+const submitArticle = (requestObj) => {
+  return connection('articles')
+    .insert({
+      body: requestObj.body,
+      author: requestObj.username,
+      title: requestObj.title,
+      topic: requestObj.topic,
+    })
+    .into('articles')
+    .returning('*');
+};
+
 const updateArticle = (articleId, update) => {
   if (isNaN(update.inc_votes) && Object.keys(update).length) {
     return Promise.reject(400);
@@ -131,4 +143,5 @@ module.exports = {
   postComment,
   retrieveComments,
   getAllArticles,
+  submitArticle,
 };

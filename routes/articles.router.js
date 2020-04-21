@@ -6,6 +6,7 @@ const {
   getComments,
   selectAllArticles,
   getRandomArticle,
+  postArticle,
 } = require('../controllers/articles.controllers');
 
 articlesRouter
@@ -18,6 +19,7 @@ articlesRouter
 articlesRouter
   .route('/article')
   .get(getRandomArticle)
+  .post(postArticle)
   .all((req, res, next) => {
     res.status(405).send({ msg: 'method not found' });
   });

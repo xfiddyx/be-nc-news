@@ -4,6 +4,7 @@ const {
   postComment,
   retrieveComments,
   getAllArticles,
+  submitArticle,
 } = require('../models/articles.models');
 
 const selectAllArticles = (req, res, next) => {
@@ -46,6 +47,14 @@ const getRandomArticle = (req, res, next) => {
     .catch(next);
 };
 
+const postArticle = (req, res, next) => {
+  submitArticle(req.body)
+    .then((result) => {
+      res.status(201).send({ article: result[0] });
+    })
+    .catch(next);
+};
+
 const patchArticle = (req, res, next) => {
   updateArticle(req.params.article_id, req.body)
     .then((updated_article) =>
@@ -73,6 +82,7 @@ const getComments = (req, res, next) => {
 module.exports = {
   selectArticle,
   patchArticle,
+  postArticle,
   postArticleComment,
   getComments,
   selectAllArticles,

@@ -462,4 +462,28 @@ describe('/api', () => {
         });
     });
   });
+  describe.only('POST /api/articles/article', () => {
+    it('successfully posts', () => {
+      return request(app)
+        .post('/api/articles/article')
+        .send({
+          username: 'butter_bridge',
+          title: 'Article Title',
+          body: 'Posting an article!',
+          topic: 'cats',
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.article).to.have.all.keys([
+            'author',
+            'article_id',
+            'title',
+            'votes',
+            'created_at',
+            'body',
+            'topic',
+          ]);
+        });
+    });
+  });
 });
