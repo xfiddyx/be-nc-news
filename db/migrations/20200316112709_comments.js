@@ -1,13 +1,7 @@
-exports.up = function(knex) {
-  return knex.schema.createTable('comments', commentsTable => {
-    commentsTable
-      .increments('comment_id')
-      .primary()
-      .unique();
-    commentsTable
-      .string('author')
-      .references('users.username')
-      .notNullable();
+exports.up = function (knex) {
+  return knex.schema.createTable('comments', (commentsTable) => {
+    commentsTable.increments('comment_id').primary();
+    commentsTable.string('author').references('users.username').notNullable();
     commentsTable
       .integer('article_id')
       .references('articles.article_id')
@@ -18,6 +12,6 @@ exports.up = function(knex) {
   });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema.dropTable('comments');
 };

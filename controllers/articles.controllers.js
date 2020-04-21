@@ -36,6 +36,16 @@ const selectArticle = (req, res, next) => {
     .catch(next);
 };
 
+const getRandomArticle = (req, res, next) => {
+  getAllArticles()
+    .then((articles) => {
+      const randomArticle =
+        articles[Math.floor(Math.random() * articles.length)];
+      res.status(200).send({ article: randomArticle });
+    })
+    .catch(next);
+};
+
 const patchArticle = (req, res, next) => {
   updateArticle(req.params.article_id, req.body)
     .then((updated_article) =>
@@ -66,4 +76,5 @@ module.exports = {
   postArticleComment,
   getComments,
   selectAllArticles,
+  getRandomArticle,
 };

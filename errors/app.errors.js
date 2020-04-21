@@ -1,5 +1,4 @@
 const statusCodeErrors = (err, req, res, next) => {
-  console.log(err);
   const statusCodeErr = {
     404: { message: 'not found', status: 404 },
     400: { message: 'invalid request', status: 400 },

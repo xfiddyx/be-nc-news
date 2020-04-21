@@ -4,12 +4,19 @@ const {
   patchArticle,
   postArticleComment,
   getComments,
-  selectAllArticles
+  selectAllArticles,
+  getRandomArticle,
 } = require('../controllers/articles.controllers');
 
 articlesRouter
   .route('/')
   .get(selectAllArticles)
+  .all((req, res, next) => {
+    res.status(405).send({ msg: 'method not found' });
+  });
+articlesRouter
+  .route('/homepage')
+  .get(getRandomArticle)
   .all((req, res, next) => {
     res.status(405).send({ msg: 'method not found' });
   });
