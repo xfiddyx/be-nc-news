@@ -462,7 +462,7 @@ describe('/api', () => {
         });
     });
   });
-  describe.only('POST /api/articles/article', () => {
+  describe('POST /api/articles/article', () => {
     it('successfully posts', () => {
       return request(app)
         .post('/api/articles/article')
@@ -483,6 +483,27 @@ describe('/api', () => {
             'body',
             'topic',
           ]);
+        });
+    });
+  });
+  describe('DELETE /api/articles/5', () => {
+    it('deletes a selected comment', () => {
+      return request(app).delete('/api/articles/5').expect(204);
+    });
+    it('returns an error when an id that does not exist is submitted', () => {
+      return request(app)
+        .delete('/api/articles/245')
+        .expect(404)
+        .then((result) => {
+          expect(result.body).eql({ msg: 'not found' });
+        });
+    });
+    it('returns an error when an id that is not valid', () => {
+      return request(app)
+        .delete('/api/articles/not_an_integer')
+        .expect(400)
+        .then((result) => {
+          expect(result.body).eql({ msg: 'invalid request' });
         });
     });
   });

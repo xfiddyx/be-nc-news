@@ -5,6 +5,7 @@ const {
   retrieveComments,
   getAllArticles,
   submitArticle,
+  reqToDeleteArticle,
 } = require('../models/articles.models');
 
 const selectAllArticles = (req, res, next) => {
@@ -79,6 +80,18 @@ const getComments = (req, res, next) => {
     .catch(next);
 };
 
+const deleteArticle = (req, res, next) => {
+  reqToDeleteArticle(req.params.article_id)
+    .then((result) => {
+      if (result === 0) {
+        next(404);
+      } else {
+        res.status(204).send();
+      }
+    })
+    .catch(next);
+};
+
 module.exports = {
   selectArticle,
   patchArticle,
@@ -87,4 +100,5 @@ module.exports = {
   getComments,
   selectAllArticles,
   getRandomArticle,
+  deleteArticle,
 };

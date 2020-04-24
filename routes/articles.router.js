@@ -7,6 +7,7 @@ const {
   selectAllArticles,
   getRandomArticle,
   postArticle,
+  deleteArticle,
 } = require('../controllers/articles.controllers');
 
 articlesRouter
@@ -28,6 +29,7 @@ articlesRouter
   .route('/:article_id')
   .get(selectArticle)
   .patch(patchArticle)
+  .delete(deleteArticle)
   .all((req, res, next) => {
     res.status(405).send({ msg: 'method not found' });
   });

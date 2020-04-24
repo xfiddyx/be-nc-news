@@ -136,6 +136,10 @@ const checkExists = (table, column, query) => {
     .where({ [column]: query })
     .first();
 };
+const reqToDeleteArticle = (articleId) => {
+  console.log('in the model');
+  return connection('articles').where({ article_id: articleId }).del();
+};
 
 module.exports = {
   getArticles,
@@ -144,4 +148,5 @@ module.exports = {
   retrieveComments,
   getAllArticles,
   submitArticle,
+  reqToDeleteArticle,
 };
