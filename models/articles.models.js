@@ -137,7 +137,6 @@ const checkExists = (table, column, query) => {
     .first();
 };
 const reqToDeleteArticle = (articleId) => {
-  console.log('in the model');
   return connection('articles').where({ article_id: articleId }).del();
 };
 
