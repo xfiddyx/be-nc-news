@@ -21,13 +21,11 @@ jobs:
         image: postgres:11.6-alpine
         env:
           POSTGRES_HOST: postgres
-          POSTGRES_USERNAME: postgres
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
-          POSTGRES_PORT: 32768
-          run: psql -f ./db/setup.sql
         ports:
-          - 5432/tcp
+          - 5432/5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
@@ -43,9 +41,9 @@ jobs:
         env:
           NODE_ENV: test
           POSTGRES_HOST: postgres
-          POSTGRES_USERNAME: postgres
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_PORT: 32768
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: psql -f ./db/setup.sql
       - name: migrate
         run: npm migrate-make
