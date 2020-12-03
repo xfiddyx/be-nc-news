@@ -16,21 +16,18 @@ jobs:
       matrix:
         node-version: [12.x]
 
-    env:
-      NODE_ENV: test
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
-      DB_HOSTNAME: localhost
-      POSTGRES_DB: nc_news_test
-
     services:
       postgres:
         image: postgres:11.6-alpine
         env:
-          POSTGRES_USER: postgres
+          POSTGRES_HOST: postgres
+          POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+          run: psql -f ./db/setup.sql
         ports:
-          - 5432:5432
+          - 5432/tcp
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
@@ -46,17 +43,16 @@ jobs:
         env:
           NODE_ENV: test
           POSTGRES_HOST: postgres
-          POSTGRES_USER: postgres
+          POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: nc_news_test
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         run: psql -f ./db/setup.sql
       - name: migrate
         run: npm migrate-make
-      - name: seed  
+      - name: seed
         run: knex seed:run
 
       - name: run the test
         run: npm test
-      - name: test utils  
+      - name: test utils
         run: npm run test-utils
