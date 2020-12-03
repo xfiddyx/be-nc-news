@@ -24,7 +24,7 @@ jobs:
           POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+          POSTGRES_PORT: 32768
           run: psql -f ./db/setup.sql
         ports:
           - 5432/tcp
@@ -45,7 +45,7 @@ jobs:
           POSTGRES_HOST: postgres
           POSTGRES_USERNAME: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+          POSTGRES_PORT: 32768
         run: psql -f ./db/setup.sql
       - name: migrate
         run: npm migrate-make
